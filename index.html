@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Postres Yanez - Cuentas Bancarias</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #fdf2f4;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+      margin: 0;
+    }
+    .card {
+      background: #fff;
+      max-width: 400px;
+      width: 100%;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+    h1 { color: #9e1b32; margin-bottom: 4px; font-size: 1.6rem; }
+    .subtitle { color: #666; font-size: 0.9rem; margin-bottom: 20px; }
+    .bank-box {
+      border: 1px solid #eee;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      text-align: left;
+      background: #fafafa;
+    }
+    .bank-title { font-weight: 700; font-size: 1.1rem; margin-bottom: 6px; }
+    .atlantida { color: #c8102e; }
+    .bac { color: #e30613; }
+    .account-num {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin: 8px 0;
+      user-select: all;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.95rem;
+      margin-top: 6px;
+    }
+    .btn-copy { background: #9e1b32; color: white; }
+    .btn-copy:active { opacity: 0.85; }
+    .btn-share { background: #25D366; color: white; margin-top: 10px; }
+    .btn-download { background: #333; color: white; margin-top: 10px; font-size: 0.85rem; }
+    #qr-container { margin-top: 20px; padding-top: 16px; border-top: 1px dashed #ddd; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Postres Yanez</h1>
+    <div class="subtitle">Información de Cuenta Bancaria</div>
+
+    <div class="bank-box">
+      <div class="bank-title atlantida">Banco Atlántida</div>
+      <div>Titular: <strong>AUDELY ORELLANA YANEZ</strong></div>
+      <div class="account-num">2020138129</div>
+      <button class="btn-copy" onclick="copiar('2020138129', this)">Copiar cuenta Atlántida</button>
+    </div>
+
+    <div class="bank-box">
+      <div class="bank-title bac">BAC Credomatic</div>
+      <div>Titular: <strong>AUDELY ORELLANA YANEZ</strong></div>
+      <div class="account-num">759526541</div>
+      <button class="btn-copy" onclick="copiar('759526541', this)">Copiar cuenta BAC</button>
+    </div>
+
+    <button class="btn-share" onclick="compartirWhatsApp()">Compartir datos por WhatsApp</button>
+
+    <div id="qr-container">
+      <div class="subtitle">Escanea o descarga este QR para compartir</div>
+      <img id="qr-img" alt="QR Cuentas Postres Yanez" width="200" height="200" />
+      <button class="btn-download" onclick="descargarQR()">Descargar imagen QR</button>
+    </div>
+  </div>
+
+  <script>
+    const urlActual = encodeURIComponent(window.location.href);
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${urlActual}`;
+    document.getElementById('qr-img').src = qrUrl;
+
+    function copiar(texto, boton) {
+      navigator.clipboard.writeText(texto);
+      const original = boton.innerText;
+      boton.innerText = '¡Copiado!';
+      setTimeout(() => boton.innerText = original, 2000);
+    }
+
+    function compartirWhatsApp() {
+      const msg = encodeURIComponent(
+        "*Postres Yanez - Cuentas Bancarias*\n\n" +
+        "*Banco Atlántida*\nTitular: AUDELY ORELLANA YANEZ\nCuenta: 2020138129\n\n" +
+        "*BAC Credomatic*\nTitular: AUDELY ORELLANA YANEZ\nCuenta: 759526541\n\n" +
+        "Ver tarjeta y QR: " + window.location.href
+      );
+      window.open(`https://wa.me/?text=${msg}`, '_blank');
+    }
+
+    async function descargarQR() {
+      const response = await fetch(qrUrl);
+      const blob = await response.blob();
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'QR_Postres_Yanez.png';
+      link.click();
+    }
+  </script>
+</body>
+</html>
