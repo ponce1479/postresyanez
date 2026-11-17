@@ -58,6 +58,7 @@
     .btn-share { background: #25D366; color: white; margin-top: 10px; }
     .btn-download { background: #333; color: white; margin-top: 10px; font-size: 0.85rem; }
     #qr-container { margin-top: 20px; padding-top: 16px; border-top: 1px dashed #ddd; }
+    .url-text { font-size: 0.78rem; color: #888; margin-top: 8px; word-break: break-all; }
   </style>
 </head>
 <body>
@@ -82,15 +83,16 @@
     <button class="btn-share" onclick="compartirWhatsApp()">Compartir datos por WhatsApp</button>
 
     <div id="qr-container">
-      <div class="subtitle">Escanea o descarga este QR para compartir</div>
+      <div class="subtitle">Escanea o descarga este QR para ver y copiar las cuentas</div>
       <img id="qr-img" alt="QR Cuentas Postres Yanez" width="200" height="200" />
+      <div class="url-text">https://ponce1479.github.io/postresyanez/</div>
       <button class="btn-download" onclick="descargarQR()">Descargar imagen QR</button>
     </div>
   </div>
 
   <script>
-    const urlActual = encodeURIComponent(window.location.href);
-    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${urlActual}`;
+    const SITIO_OFICIAL = "https://ponce1479.github.io/postresyanez/";
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(SITIO_OFICIAL)}`;
     document.getElementById('qr-img').src = qrUrl;
 
     function copiar(texto, boton) {
@@ -105,7 +107,7 @@
         "*Postres Yanez - Cuentas Bancarias*\n\n" +
         "*Banco Atlántida*\nTitular: AUDELY ORELLANA YANEZ\nCuenta: 2020138129\n\n" +
         "*BAC Credomatic*\nTitular: AUDELY ORELLANA YANEZ\nCuenta: 759526541\n\n" +
-        "Ver tarjeta y QR: " + window.location.href
+        "Ver tarjeta y QR: " + SITIO_OFICIAL
       );
       window.open(`https://wa.me/?text=${msg}`, '_blank');
     }
